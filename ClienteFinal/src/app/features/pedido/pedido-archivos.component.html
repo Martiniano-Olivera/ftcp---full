@@ -1,0 +1,30 @@
+<div class="archivos-container">
+  <div class="step-header">
+    <h2>Paso 1: Seleccionar Archivos</h2>
+    <p>Sube los documentos que deseas imprimir</p>
+  </div>
+
+  <app-file-upload
+    [archivos]="archivos"
+    (archivoAgregado)="onArchivoAgregado($event)"
+    (archivoEliminado)="onArchivoEliminado($event)"
+  ></app-file-upload>
+
+  <div class="step-actions">
+    <button
+      class="btn-next"
+      [disabled]="archivos.length === 0"
+      (click)="siguiente()"
+    >
+      Continuar
+      <span class="btn-icon">→</span>
+    </button>
+  </div>
+
+  <div class="help-text" *ngIf="archivos.length === 0">
+    <p>
+      💡 <strong>Consejo:</strong> Puedes arrastrar múltiples archivos a la
+      vez o hacer clic para seleccionarlos individualmente.
+    </p>
+  </div>
+</div>

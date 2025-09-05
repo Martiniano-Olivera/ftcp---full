@@ -1,0 +1,80 @@
+<mat-sidenav-container class="sidenav-container">
+  <!-- Sidebar -->
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+      [attr.role]="'navigation'"
+      [mode]="'side'"
+      [opened]="true">
+    
+    <div class="sidenav-header">
+      <div class="app-info">
+        <mat-icon class="app-icon">print</mat-icon>
+        <h2 class="app-title">{{ appName }}</h2>
+      </div>
+      <small class="app-version">v{{ appVersion }}</small>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <mat-nav-list>
+      <a mat-list-item routerLink="/pedidos/pendientes" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>pending</mat-icon>
+        <span matListItemTitle>Pedidos Pendientes</span>
+        <mat-icon matListItemMeta>chevron_right</mat-icon>
+      </a>
+      
+      <a mat-list-item routerLink="/pedidos/listos" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>check_circle</mat-icon>
+        <span matListItemTitle>Pedidos Completados</span>
+        <mat-icon matListItemMeta>chevron_right</mat-icon>
+      </a>
+    </mat-nav-list>
+
+    <mat-divider></mat-divider>
+
+    <div class="sidenav-footer">
+      <div class="user-info">
+        <mat-icon>account_circle</mat-icon>
+        <span>{{ currentUser?.username || 'Usuario' }}</span>
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <!-- Main Content -->
+  <mat-sidenav-content class="sidenav-content">
+    <!-- Toolbar -->
+    <mat-toolbar color="primary" class="toolbar">
+      <button mat-icon-button (click)="drawer.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      
+      <span class="toolbar-title">{{ getCurrentRoute() }}</span>
+      
+      <span class="toolbar-spacer"></span>
+      
+      <!-- Loading indicator -->
+      <mat-spinner *ngIf="isLoading" diameter="20" class="toolbar-spinner"></mat-spinner>
+      
+      <!-- User menu -->
+      <button mat-icon-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      
+      <mat-menu #userMenu="matMenu">
+        <div mat-menu-item>
+          <mat-icon>person</mat-icon>
+          <span>{{ currentUser?.username || 'Usuario' }}</span>
+        </div>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Cerrar Sesión</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <!-- Page Content -->
+    <div class="content-container">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

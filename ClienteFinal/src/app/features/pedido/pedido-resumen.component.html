@@ -1,0 +1,38 @@
+<div class="resumen-container">
+  <div class="step-header">
+    <h2>Paso 3: Revisar y Confirmar</h2>
+    <p>Verifica que todo esté correcto antes de proceder al pago</p>
+  </div>
+
+  <div class="resumen-content" *ngIf="pedido">
+    <app-summary-card [pedido]="pedido"></app-summary-card>
+
+    <div class="confirmacion-section">
+      <div class="confirmacion-text">
+        <h3>¿Todo se ve correcto?</h3>
+        <p>Una vez confirmado, serás redirigido a la pantalla de pago</p>
+      </div>
+
+      <div class="step-actions">
+        <button type="button" class="btn-secondary" (click)="anterior()">
+          <span class="btn-icon">←</span>
+          Anterior
+        </button>
+        <button type="button" class="btn-primary" (click)="confirmar()">
+          Ir a Pagar
+          <span class="btn-icon">💳</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="error-message" *ngIf="!pedido">
+    <p>
+      ❌ No se pudo cargar el resumen del pedido. Por favor, regresa e
+      intenta nuevamente.
+    </p>
+    <button type="button" class="btn-secondary" (click)="anterior()">
+      Volver
+    </button>
+  </div>
+</div>

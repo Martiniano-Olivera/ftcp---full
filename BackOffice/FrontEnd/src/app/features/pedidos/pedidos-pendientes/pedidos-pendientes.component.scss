@@ -1,0 +1,290 @@
+.pedidos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+// Header Card
+.header-card {
+  background: linear-gradient(135deg, #3f51b5 0%, #5c6bc0 100%);
+  color: white;
+  padding: 10px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.header-info h1 {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 500;
+}
+
+.subtitle {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 16px;
+}
+
+.header-stats {
+  display: flex;
+  gap: 24px;
+}
+
+.stat-item {
+  text-align: center;
+  min-width: 80px;
+}
+
+.stat-number {
+  display: block;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 12px;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+// Filters Card
+.filters-card {
+  background-color: #fafafa;
+}
+
+.filters-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  align-items: end;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.clear-filters-btn {
+  height: 56px;
+  align-self: end;
+}
+
+// Table Card
+.table-card {
+  background-color: white;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.pedidos-table {
+  width: 100%;
+  min-width: 800px;
+}
+
+// Table Cells
+.pedido-id {
+  font-weight: 600;
+  color: #3f51b5;
+  font-family: 'Courier New', monospace;
+}
+
+.cliente-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cliente-nombre {
+  font-weight: 500;
+}
+
+.cliente-telefono {
+  font-size: 12px;
+  color: #666;
+}
+
+.archivos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.archivo-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background-color: #f5f5f5;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.file-icon {
+  color: #666;
+  font-size: 20px;
+}
+
+.archivo-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.archivo-nombre {
+  font-size: 14px;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.archivo-tamano {
+  font-size: 12px;
+  color: #666;
+}
+
+.archivo-btn {
+  min-width: 32px;
+  height: 32px;
+  line-height: 32px;
+}
+
+.fecha {
+  font-size: 14px;
+  color: #666;
+}
+
+.acciones-container {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+// Loading and Empty States
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+  color: #666;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: #666;
+}
+
+.empty-icon {
+  font-size: 64px;
+  color: #ccc;
+  margin-bottom: 16px;
+}
+
+.empty-state h3 {
+  margin: 0 0 8px 0;
+  color: #333;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 16px;
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .header-stats {
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  .filters-container {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .pedidos-container {
+    gap: 16px;
+  }
+
+  .header-info h1 {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  .header-stats {
+    gap: 16px;
+  }
+
+  .stat-item {
+    min-width: 60px;
+  }
+
+  .stat-number {
+    font-size: 20px;
+  }
+
+  .filters-container {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .clear-filters-btn {
+    align-self: stretch;
+  }
+}
+
+@media (max-width: 600px) {
+  .header-info h1 {
+    font-size: 20px;
+  }
+
+  .header-stats {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .stat-item {
+    min-width: auto;
+  }
+
+  .acciones-container {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .archivo-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .archivo-btn {
+    align-self: flex-end;
+  }
+}

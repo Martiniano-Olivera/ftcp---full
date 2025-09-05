@@ -1,0 +1,67 @@
+<div class="wizard-container">
+  <div class="wizard-header">
+    <h1>Crear Pedido de Impresión</h1>
+    <p>Completa los pasos para crear tu pedido</p>
+  </div>
+
+  <div class="stepper-container">
+    <div class="stepper">
+      <div
+        class="step"
+        [class.active]="pasoActual === 1"
+        [class.completed]="pasoActual > 1"
+      >
+        <div class="step-number">1</div>
+        <div class="step-label">Archivos</div>
+      </div>
+      <div class="step-line" [class.completed]="pasoActual > 1"></div>
+
+      <div
+        class="step"
+        [class.active]="pasoActual === 2"
+        [class.completed]="pasoActual > 2"
+      >
+        <div class="step-number">2</div>
+        <div class="step-label">Opciones</div>
+      </div>
+      <div class="step-line" [class.completed]="pasoActual > 2"></div>
+
+      <div
+        class="step"
+        [class.active]="pasoActual === 3"
+        [class.completed]="pasoActual === 3"
+      >
+        <div class="step-number">3</div>
+        <div class="step-label">Resumen</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wizard-content">
+    <div *ngIf="pasoActual === 1">
+      <app-pedido-archivos
+        [archivos]="pedido?.archivos || []"
+        (archivoAgregado)="onArchivoAgregado($event)"
+        (archivoEliminado)="onArchivoEliminado($event)"
+        (siguienteClicked)="siguientePaso()"
+      ></app-pedido-archivos>
+    </div>
+
+    <div *ngIf="pasoActual === 2">
+      <app-pedido-opciones
+        [opciones]="pedido?.opciones || { tipoImpresion: 'simple', cantidad: 1, color: false, tamanoPapel: 'A4', orientacion: 'vertical' }"
+        (opcionesActualizadas)="onOpcionesActualizadas($event)"
+        (anteriorClicked)="pasoAnterior()"
+        (siguienteClicked)="siguientePaso()"
+      ></app-pedido-opciones>
+    </div>
+
+    <div *ngIf="pasoActual === 3">
+      <app-pedido-resumen
+        [pedido]="pedido"
+        (anteriorClicked)="pasoAnterior()"
+        (confirmarClicked)="confirmarPedido()"
+      ></app-pedido-resumen>
+    </div>
+  </div>
+</div>

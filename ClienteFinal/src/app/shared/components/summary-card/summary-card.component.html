@@ -1,0 +1,45 @@
+<div class="summary-card">
+  <h3 class="summary-title">Resumen del Pedido</h3>
+  
+  <div class="summary-section">
+    <h4>Archivos ({{ pedido.archivos.length }})</h4>
+    <div class="file-summary" *ngFor="let archivo of pedido.archivos">
+      <span class="file-name">{{ archivo.nombre }}</span>
+      <span class="file-size">{{ formatFileSize(archivo.tamano) }}</span>
+    </div>
+  </div>
+
+  <div class="summary-section">
+    <h4>Opciones de Impresión</h4>
+    <div class="options-summary">
+      <div class="option-item">
+        <span class="option-label">Tipo:</span>
+        <span class="option-value">{{ getTipoImpresionText(pedido.opciones.tipoImpresion) }}</span>
+      </div>
+      <div class="option-item">
+        <span class="option-label">Cantidad:</span>
+        <span class="option-value">{{ pedido.opciones.cantidad }} copia{{ pedido.opciones.cantidad > 1 ? 's' : '' }}</span>
+      </div>
+      <div class="option-item">
+        <span class="option-label">Color:</span>
+        <span class="option-value">{{ pedido.opciones.color ? 'Sí' : 'No' }}</span>
+      </div>
+      <div class="option-item">
+        <span class="option-label">Tamaño:</span>
+        <span class="option-value">{{ pedido.opciones.tamanoPapel }}</span>
+      </div>
+      <div class="option-item">
+        <span class="option-label">Orientación:</span>
+        <span class="option-value">{{ getOrientacionText(pedido.opciones.orientacion) }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary-section price-section">
+    <h4>Precio Estimado</h4>
+    <div class="price-display">
+      <span class="price-amount">${{ pedido.precioEstimado.toFixed(2) }}</span>
+      <span class="price-note">* Precio final puede variar</span>
+    </div>
+  </div>
+</div>

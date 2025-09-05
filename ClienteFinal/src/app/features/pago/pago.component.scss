@@ -1,0 +1,222 @@
+.pago-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.pago-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.pago-header h1 {
+  color: #2c3e50;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.pago-header p {
+  color: #7f8c8d;
+  font-size: 1.1rem;
+}
+
+.pago-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.resumen-pedido,
+.metodos-pago {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.resumen-pedido h3,
+.metodos-pago h3 {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.pedido-details {
+  display: grid;
+  gap: 1rem;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.detail-label {
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+.detail-value {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.total-price {
+  color: #27ae60;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.metodos-pago {
+  margin-top: 1rem;
+}
+
+.metodo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border: 2px solid #ecf0f1;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.metodo-item:hover:not(.disabled) {
+  border-color: #667eea;
+  background: #f8f9ff;
+}
+
+.metodo-item.disabled {
+  opacity: 0.6;
+  background: #f8f9fa;
+}
+
+.metodo-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.metodo-icon {
+  font-size: 2rem;
+}
+
+.metodo-details h4 {
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+  font-size: 1.1rem;
+}
+
+.metodo-details p {
+  color: #7f8c8d;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.metodo-status {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.metodo-item:not(.disabled) .metodo-status {
+  background: #d4edda;
+  color: #155724;
+}
+
+.metodo-item.disabled .metodo-status {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.acciones-pago {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.btn-pagar {
+  background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+  color: white;
+  border: none;
+  padding: 1.25rem 3rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(39, 174, 96, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-pagar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(39, 174, 96, 0.6);
+}
+
+.btn-icon {
+  font-size: 1.5rem;
+}
+
+.pago-nota {
+  color: #7f8c8d;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+.error-message {
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  border-radius: 8px;
+  padding: 2rem;
+  color: #c53030;
+  text-align: center;
+}
+
+.error-message p {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.btn-secondary {
+  background: #ecf0f1;
+  color: #7f8c8d;
+  border: none;
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: #d5dbdb;
+  color: #2c3e50;
+}
+
+@media (max-width: 768px) {
+  .pago-header h1 {
+    font-size: 2rem;
+  }
+
+  .metodo-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .btn-pagar {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+  }
+}

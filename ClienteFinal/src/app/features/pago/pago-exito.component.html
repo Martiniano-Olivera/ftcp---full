@@ -1,0 +1,52 @@
+<div class="exito-container">
+  <div class="exito-content">
+    <div class="exito-icon">✅</div>
+    <h1>¡Pago Realizado con Éxito!</h1>
+    <p class="exito-message">
+      Tu pedido de impresión ha sido confirmado y procesado correctamente.
+    </p>
+
+    <div class="detalles-pedido">
+      <h3>Detalles del Pedido</h3>
+      <div class="detalle-item">
+        <span class="detalle-label">Estado:</span>
+        <span class="detalle-value success">Confirmado</span>
+      </div>
+      <div class="detalle-item">
+        <span class="detalle-label">Fecha:</span>
+        <span class="detalle-value">{{
+          fechaActual | date : 'dd/MM/yyyy HH:mm'
+        }}</span>
+      </div>
+      <div class="detalle-item">
+        <span class="detalle-label">Tiempo Estimado:</span>
+        <span class="detalle-value">15-20 minutos</span>
+      </div>
+    </div>
+
+    <div class="instrucciones">
+      <h3>Próximos Pasos</h3>
+      <ul class="pasos-lista">
+        <li>Tu pedido está siendo procesado en la impresora</li>
+        <li>Recibirás una notificación cuando esté listo</li>
+        <li>Puedes recogerlo en la ventanilla principal</li>
+        <li>Mantén tu número de pedido a mano</li>
+      </ul>
+    </div>
+
+    <div class="acciones-exito">
+      <button class="btn-inicio" (click)="volverInicio()">
+        <span class="btn-icon">🏠</span>
+        Volver al Inicio
+      </button>
+    </div>
+
+    <div class="contacto-info">
+      <p>¿Tienes alguna pregunta? Contacta al personal de soporte</p>
+      <div class="contacto-details">
+        <span>📞 Extensión: 1234</span>
+        <span>📧 soporte&#64;mikiosco.edu</span>
+      </div>
+    </div>
+  </div>
+</div>

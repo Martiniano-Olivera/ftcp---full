@@ -1,0 +1,85 @@
+<div class="opciones-container">
+  <div class="step-header">
+    <h2>Paso 2: Configurar Opciones</h2>
+    <p>Personaliza tu impresión según tus necesidades</p>
+  </div>
+
+  <form class="opciones-form" (ngSubmit)="guardarOpciones()">
+    <div class="form-group">
+      <label for="tipoImpresion">Tipo de Impresión</label>
+      <select
+        id="tipoImpresion"
+        name="tipoImpresion"
+        [(ngModel)]="opciones.tipoImpresion"
+        class="form-control"
+      >
+        <option value="simple">Simple cara</option>
+        <option value="doble">Doble cara</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="cantidad">Cantidad de Copias</label>
+      <input
+        type="number"
+        id="cantidad"
+        name="cantidad"
+        [(ngModel)]="opciones.cantidad"
+        min="1"
+        max="100"
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="checkbox-label">
+        <input
+          type="checkbox"
+          name="color"
+          [(ngModel)]="opciones.color"
+          class="checkbox-input"
+        />
+        <span class="checkmark"></span>
+        Impresión a Color
+      </label>
+    </div>
+
+    <div class="form-group">
+      <label for="tamanoPapel">Tamaño de Papel</label>
+      <select
+        id="tamanoPapel"
+        name="tamanoPapel"
+        [(ngModel)]="opciones.tamanoPapel"
+        class="form-control"
+      >
+        <option value="A4">A4 (210 x 297 mm)</option>
+        <option value="A3">A3 (297 x 420 mm)</option>
+        <option value="Carta">Carta (8.5 x 11 pulgadas)</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="orientacion">Orientación</label>
+      <select
+        id="orientacion"
+        name="orientacion"
+        [(ngModel)]="opciones.orientacion"
+        class="form-control"
+      >
+        <option value="vertical">Vertical</option>
+        <option value="horizontal">Horizontal</option>
+      </select>
+    </div>
+
+    <div class="step-actions">
+      <button type="button" class="btn-secondary" (click)="anterior()">
+        <span class="btn-icon">←</span>
+        Anterior
+      </button>
+      <button type="submit" class="btn-primary">
+        Continuar
+        <span class="btn-icon">→</span>
+      </button>
+    </div>
+  </form>
+</div>

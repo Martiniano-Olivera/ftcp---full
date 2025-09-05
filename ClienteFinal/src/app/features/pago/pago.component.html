@@ -1,0 +1,79 @@
+<div class="pago-container">
+  <div class="pago-header">
+    <h1>Procesar Pago</h1>
+    <p>Completa tu pedido de impresión</p>
+  </div>
+
+  <div class="pago-content" *ngIf="pedido">
+    <div class="resumen-pedido">
+      <h3>Resumen del Pedido</h3>
+      <div class="pedido-details">
+        <div class="detail-item">
+          <span class="detail-label">Número de Pedido:</span>
+          <span class="detail-value">{{ pedido.id }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Archivos:</span>
+          <span class="detail-value">{{ pedido.archivos.length }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Total a Pagar:</span>
+          <span class="detail-value total-price">${{ pedido.precioEstimado.toFixed(2) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="metodos-pago">
+      <h3>Métodos de Pago Disponibles</h3>
+      <div class="metodo-item">
+        <div class="metodo-info">
+          <div class="metodo-icon">💳</div>
+          <div class="metodo-details">
+            <h4>Tarjeta de Crédito/Débito</h4>
+            <p>Visa, Mastercard, American Express</p>
+          </div>
+        </div>
+        <div class="metodo-status">Disponible</div>
+      </div>
+      
+      <div class="metodo-item">
+        <div class="metodo-info">
+          <div class="metodo-icon">📱</div>
+          <div class="metodo-details">
+            <h4>Pago Móvil</h4>
+            <p>Transferencias bancarias instantáneas</p>
+          </div>
+        </div>
+        <div class="metodo-status">Disponible</div>
+      </div>
+      
+      <div class="metodo-item disabled">
+        <div class="metodo-info">
+          <div class="metodo-icon">💵</div>
+          <div class="metodo-details">
+            <h4>Efectivo</h4>
+            <p>Pago en ventanilla</p>
+          </div>
+        </div>
+        <div class="metodo-status">No disponible</div>
+      </div>
+    </div>
+
+    <div class="acciones-pago">
+      <button class="btn-pagar" (click)="procesarPago()">
+        <span class="btn-icon">💳</span>
+        Pagar Ahora
+      </button>
+      <p class="pago-nota">
+        * Al hacer clic en "Pagar Ahora", serás redirigido a una pasarela de pago segura
+      </p>
+    </div>
+  </div>
+
+  <div class="error-message" *ngIf="!pedido">
+    <p>❌ No se pudo cargar la información del pedido. Por favor, regresa e intenta nuevamente.</p>
+    <button type="button" class="btn-secondary" (click)="volverInicio()">
+      Volver al Inicio
+    </button>
+  </div>
+</div>

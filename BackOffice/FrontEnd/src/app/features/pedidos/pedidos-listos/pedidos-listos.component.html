@@ -1,0 +1,199 @@
+<div class="pedidos-container">
+  <!-- Header con título y estadísticas -->
+  <mat-card class="header-card">
+    <div class="header-content">
+      <div class="header-info">
+        <!-- <h1>Pedidos Completados</h1> -->
+        <p class="subtitle">Historial de pedidos finalizados</p>
+      </div>
+      <div class="header-stats">
+        <div class="stat-item">
+          <span class="stat-number">{{ filteredPedidos.length }}</span>
+          <span class="stat-label">Total</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{{ pedidosListos }}</span>
+          <span class="stat-label">Listos</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{{ pedidosCompletados }}</span>
+          <span class="stat-label">Completados</span>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- Filtros -->
+  <mat-card class="filters-card">
+    <mat-card-content>
+      <div class="filters-container">
+        <div class="filter-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Buscar</mat-label>
+            <input matInput [formControl]="searchControl" placeholder="Cliente o ID del pedido">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="filter-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Estado</mat-label>
+            <mat-select [formControl]="estadoFilter">
+              <mat-option value="todos">Todos los estados</mat-option>
+              <mat-option value="listo">Listo</mat-option>
+              <mat-option value="completado">Completado</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="filter-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Fecha desde</mat-label>
+            <input matInput [matDatepicker]="pickerInicio" [formControl]="fechaInicioFilter">
+            <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+            <mat-datepicker #pickerInicio></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="filter-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Fecha hasta</mat-label>
+            <input matInput [matDatepicker]="pickerFin" [formControl]="fechaFinFilter">
+            <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFin></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="filter-group">
+          <button mat-stroked-button (click)="limpiarFiltros()" class="clear-filters-btn">
+            <mat-icon>clear</mat-icon>
+            Limpiar
+          </button>
+        </div>
+
+        <div class="filter-group">
+          <button mat-raised-button color="accent" (click)="exportarHistorial()" class="export-btn">
+            <mat-icon>download</mat-icon>
+            Exportar
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Tabla de pedidos -->
+  <mat-card class="table-card">
+    <mat-card-content>
+      <div class="table-container">
+        <table mat-table [dataSource]="filteredPedidos" class="pedidos-table">
+          <!-- ID -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let pedido">
+              <span class="pedido-id">#{{ pedido.id }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Cliente -->
+          <ng-container matColumnDef="clienteNombre">
+            <th mat-header-cell *matHeaderCellDef>Cliente</th>
+            <td mat-cell *matCellDef="let pedido">
+              <div class="cliente-info">
+                <span class="cliente-nombre">{{ pedido.clienteNombre }}</span>
+                <span class="cliente-telefono" *ngIf="pedido.telefonoCliente">
+                  {{ pedido.telefonoCliente }}
+                </span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Archivos -->
+          <ng-container matColumnDef="archivos">
+            <th mat-header-cell *matHeaderCellDef>Archivos</th>
+            <td mat-cell *matCellDef="let pedido">
+              <div class="archivos-container">
+                <div *ngFor="let archivo of pedido.archivos" class="archivo-item">
+                  <mat-icon [class]="'file-icon ' + getFileIcon(archivo.tipo)">
+                    {{ getFileIcon(archivo.tipo) }}
+                  </mat-icon>
+                  <div class="archivo-info">
+                    <span class="archivo-nombre">{{ archivo.nombre }}</span>
+                    <span class="archivo-tamano">{{ getFileSize(archivo.tamano) }}</span>
+                  </div>
+                  <button mat-icon-button (click)="abrirArchivo(archivo.url)" 
+                          matTooltip="Abrir archivo" class="archivo-btn">
+                    <mat-icon>open_in_new</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Fecha Creación -->
+          <ng-container matColumnDef="fechaCreacion">
+            <th mat-header-cell *matHeaderCellDef>Fecha Creación</th>
+            <td mat-cell *matCellDef="let pedido">
+              <span class="fecha">{{ pedido.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Fecha Completado -->
+          <ng-container matColumnDef="fechaCompletado">
+            <th mat-header-cell *matHeaderCellDef>Fecha Completado</th>
+            <td mat-cell *matCellDef="let pedido">
+              <span class="fecha" *ngIf="pedido.fechaCompletado">
+                {{ pedido.fechaCompletado | date:'dd/MM/yyyy HH:mm' }}
+              </span>
+              <span class="fecha-pendiente" *ngIf="!pedido.fechaCompletado">
+                Pendiente
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Estado -->
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let pedido">
+              <mat-chip [color]="getEstadoColor(pedido.estado)" selected>
+                {{ pedido.estado | titlecase }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Comprobante -->
+          <ng-container matColumnDef="comprobante">
+            <th mat-header-cell *matHeaderCellDef>Comprobante</th>
+            <td mat-cell *matCellDef="let pedido">
+              <div class="comprobante-container">
+                <span *ngIf="pedido.comprobantePago" class="comprobante-existe">
+                  <mat-icon>receipt</mat-icon>
+                  Disponible
+                </span>
+                <span *ngIf="!pedido.comprobantePago" class="comprobante-no">
+                  <mat-icon>receipt_long</mat-icon>
+                  No disponible
+                </span>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <!-- Loading state -->
+        <div *ngIf="isLoading" class="loading-container">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Cargando historial...</p>
+        </div>
+
+        <!-- Empty state -->
+        <div *ngIf="!isLoading && filteredPedidos.length === 0" class="empty-state">
+          <mat-icon class="empty-icon">history</mat-icon>
+          <h3>No hay pedidos completados</h3>
+          <p>No se encontraron pedidos que coincidan con los filtros aplicados.</p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

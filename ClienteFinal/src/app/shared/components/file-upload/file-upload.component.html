@@ -1,0 +1,41 @@
+<div class="file-upload-container">
+  <div
+    class="drop-zone"
+    [class.drag-over]="isDragOver"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+    (click)="fileInput.click()"
+  >
+    <div class="drop-zone-content">
+      <div class="upload-icon">📁</div>
+      <h3>Arrastra archivos aquí o haz clic para seleccionar</h3>
+      <p>Soporta PDF, DOC, DOCX, TXT, JPG, PNG</p>
+      <input
+        #fileInput
+        type="file"
+        multiple
+        accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
+        (change)="onFileSelected($event)"
+        style="display: none;"
+      />
+    </div>
+  </div>
+
+  <div class="file-list" *ngIf="archivos.length > 0">
+    <h4>Archivos seleccionados:</h4>
+    <div class="file-item" *ngFor="let archivo of archivos">
+      <div class="file-info">
+        <span class="file-name">{{ archivo.nombre }}</span>
+        <span class="file-size">{{ formatFileSize(archivo.tamano) }}</span>
+      </div>
+      <button
+        class="remove-button"
+        (click)="eliminarArchivo(archivo.id)"
+        type="button"
+      >
+        ✕
+      </button>
+    </div>
+  </div>
+</div>
