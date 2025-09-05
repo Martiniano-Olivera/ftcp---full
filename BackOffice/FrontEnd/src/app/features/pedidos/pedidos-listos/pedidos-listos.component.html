@@ -100,8 +100,8 @@
             <td mat-cell *matCellDef="let pedido">
               <div class="cliente-info">
                 <span class="cliente-nombre">{{ pedido.clienteNombre }}</span>
-                <span class="cliente-telefono" *ngIf="pedido.telefonoCliente">
-                  {{ pedido.telefonoCliente }}
+                <span class="cliente-telefono" *ngIf="pedido.clienteTelefono">
+                  {{ pedido.clienteTelefono }}
                 </span>
               </div>
             </td>

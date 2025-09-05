@@ -7,9 +7,9 @@ export class CreateOrderFileDto {
   @IsString()
   nombre: string;
 
-  @ApiProperty({ description: 'URL del archivo en Google Drive' })
+  @ApiProperty({ description: 'URL del archivo' })
   @IsString()
-  urlDrive: string;
+  url: string;
 }
 
 export class CreateOrderDto {

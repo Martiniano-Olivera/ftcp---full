@@ -9,20 +9,54 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
+  UploadedFiles,
+  Query,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './entities/order.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { UseInterceptors } from '@nestjs/common';
+import { memoryStorage } from 'multer';
+import { randomUUID } from 'crypto';
+import { SupabaseStorageService } from '../storage/supabase-storage.service';
 
 @ApiTags('Pedidos')
 @Controller('orders')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) {}
+  constructor(
+    private readonly ordersService: OrdersService,
+    private readonly storageService: SupabaseStorageService,
+  ) {}
+
+  @Post('upload')
+  @UseInterceptors(FilesInterceptor('file', undefined, { storage: memoryStorage() }))
+  @ApiOperation({ summary: 'Subir archivos a Supabase Storage' })
+  async uploadFiles(@UploadedFiles() files: Express.Multer.File[]) {
+    const uploads = await Promise.all(
+      files.map(async (file) => {
+        const now = new Date();
+        const folder = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+        const filename = `${randomUUID()}-${file.originalname}`;
+        const path = `orders/${folder}/${filename}`;
+        await this.storageService.uploadFile(file.buffer, path, file.mimetype);
+        let url = this.storageService.getPublicUrl(path);
+        // TODO: usar createSignedUrl si el bucket es privado
+        return { nombre: file.originalname, path, url };
+      }),
+    );
+    return uploads;
+  }
 
   @Post()
   @ApiOperation({ summary: 'Crear un nuevo pedido' })
@@ -67,8 +101,11 @@ export class OrdersController {
   @ApiOperation({ summary: 'Generar link preformateado de WhatsApp' })
   @ApiResponse({ status: 200, description: 'Link de WhatsApp generado' })
   @ApiResponse({ status: 404, description: 'Pedido no encontrado' })
-  async generateWhatsAppLink(@Param('id') id: string): Promise<{ link: string }> {
-    const link = await this.ordersService.generateWhatsAppLink(id);
+  async generateWhatsAppLink(
+    @Param('id') id: string,
+    @Query('phone') phone?: string,
+  ): Promise<{ link: string }> {
+    const link = await this.ordersService.generateWhatsAppLink(id, phone);
     return { link };
   }
 

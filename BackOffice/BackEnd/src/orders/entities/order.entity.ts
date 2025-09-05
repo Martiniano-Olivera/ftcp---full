@@ -12,8 +12,8 @@ export class OrderFile {
   @ApiProperty({ description: 'Nombre del archivo' })
   nombre: string;
 
-  @ApiProperty({ description: 'URL del archivo en Google Drive' })
-  urlDrive: string;
+  @ApiProperty({ description: 'URL del archivo' })
+  url: string;
 }
 
 // Enum para estados del pedido

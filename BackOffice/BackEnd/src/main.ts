@@ -52,6 +52,10 @@ import { OrdersService } from './orders/orders.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    origin: process.env.CORS_ORIGIN?.split(',') ?? true,
+    credentials: true,
+  });
 
   // Inicialización automática para MVP
   const employeesService = app.get(EmployeesService);
@@ -80,11 +84,11 @@ async function bootstrap() {
       archivos: [
         {
           nombre: 'archivo1.pdf',
-          urlDrive: 'https://drive.google.com/file/d/archivo1',
+          url: 'https://example.com/archivo1.pdf',
         },
         {
           nombre: 'archivo2.pdf',
-          urlDrive: 'https://drive.google.com/file/d/archivo2',
+          url: 'https://example.com/archivo2.pdf',
         },
       ],
       paid: true,
