@@ -12,6 +12,13 @@ export const routes: Routes = [
       import('./features/pedido/pedido.routes').then((m) => m.pedidoRoutes),
   },
   {
+    path: 'nuevo-pedido',
+    loadComponent: () =>
+      import('./features/nuevo-pedido/nuevo-pedido.component').then(
+        (m) => m.NuevoPedidoComponent,
+      ),
+  },
+  {
     path: 'pago',
     loadChildren: () =>
       import('./features/pago/pago.routes').then((m) => m.pagoRoutes),

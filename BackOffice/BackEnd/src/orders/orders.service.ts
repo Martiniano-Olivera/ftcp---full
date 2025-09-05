@@ -50,11 +50,13 @@ export class OrdersService {
   }
 
   // Generar link de WhatsApp para un pedido
-  async generateWhatsAppLink(orderId: string): Promise<string> {
+  async generateWhatsAppLink(orderId: string, phone?: string): Promise<string> {
     const order = await this.getOrderById(orderId);
-    const message = `Hola ${order.clienteNombre}! Tu pedido está listo. Puedes retirarlo en la fotocopiadora.`;
+    const targetPhone = phone || order.clienteTelefono;
+    const primerArchivo = order.archivos?.[0]?.url || '';
+    const message = `Hola ${order.clienteNombre}! Tu pedido está listo para retirar. Detalle: ${primerArchivo}. ¡Gracias!`;
     const encodedMessage = encodeURIComponent(message);
-    return `https://wa.me/${order.clienteTelefono}?text=${encodedMessage}`;
+    return `https://wa.me/${targetPhone}?text=${encodedMessage}`;
   }
 
   // Actualizar un pedido

@@ -52,7 +52,7 @@ interface Pedido {
   fechaCreacion: Date;           // Fecha de creación
   fechaCompletado?: Date;        // Fecha de completado (opcional)
   comprobantePago?: string;      // URL del comprobante (opcional)
-  telefonoCliente?: string;      // Teléfono del cliente (opcional)
+  clienteTelefono?: string;      // Teléfono del cliente (opcional)
   observaciones?: string;        // Observaciones adicionales (opcional)
 }
 

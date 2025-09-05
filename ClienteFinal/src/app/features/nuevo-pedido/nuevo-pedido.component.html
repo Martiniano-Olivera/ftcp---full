@@ -1,0 +1,20 @@
+<div *ngIf="!enviado; else enviadoTpl">
+  <form (ngSubmit)="enviar()" #form="ngForm">
+    <label>
+      Nombre:
+      <input type="text" name="nombre" [(ngModel)]="nombre" required />
+    </label>
+    <label>
+      Teléfono:
+      <input type="tel" name="telefono" [(ngModel)]="telefono" required />
+    </label>
+    <label>
+      Archivos:
+      <input type="file" (change)="onFileChange($event)" multiple />
+    </label>
+    <button type="submit" [disabled]="loading">Enviar</button>
+  </form>
+</div>
+<ng-template #enviadoTpl>
+  <p>Pedido enviado</p>
+</ng-template>

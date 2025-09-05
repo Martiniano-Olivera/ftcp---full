@@ -6,7 +6,7 @@ export interface Pedido {
   fechaCreacion: Date;
   fechaCompletado?: Date;
   comprobantePago?: string;
-  telefonoCliente?: string;
+  clienteTelefono?: string;
   observaciones?: string;
 }
 
