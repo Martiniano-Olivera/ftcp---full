@@ -57,6 +57,11 @@ async function bootstrap() {
   const employeesService = app.get(EmployeesService);
   const ordersService = app.get(OrdersService);
 
+  app.enableCors({
+    origin: process.env.CORS_ORIGIN?.split(',') ?? true,
+    credentials: true,
+  });
+
   // Crear usuario admin/demo si no existe
   try {
     const adminExists = await employeesService.getEmployeeByUsername('admin');

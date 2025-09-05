@@ -1,0 +1,7 @@
+<form (ngSubmit)="submit()" #f="ngForm">
+  <input type="text" name="nombre" [(ngModel)]="nombre" placeholder="Nombre" required />
+  <input type="tel" name="telefono" [(ngModel)]="telefono" placeholder="Teléfono" required />
+  <input type="file" (change)="onFiles($event)" multiple />
+  <button type="submit" [disabled]="f.invalid">Enviar</button>
+</form>
+<p *ngIf="mensaje">{{ mensaje }}</p>

@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { PedidoWizardComponent } from './pedido-wizard.component';
+import { NuevoPedidoComponent } from './nuevo-pedido.component';
 
 export const pedidoRoutes: Routes = [
   {
     path: '',
-    component: PedidoWizardComponent,
+    component: NuevoPedidoComponent,
   },
 ];
