@@ -1,0 +1,7 @@
+<form (ngSubmit)="enviar()" #f="ngForm">
+  <input type="text" name="nombre" [(ngModel)]="nombre" placeholder="Nombre" required />
+  <input type="tel" name="telefono" [(ngModel)]="telefono" placeholder="Teléfono" required />
+  <input type="file" (change)="onFileChange($event)" multiple />
+  <button type="submit">Enviar</button>
+</form>
+<p *ngIf="enviado">Pedido enviado</p>

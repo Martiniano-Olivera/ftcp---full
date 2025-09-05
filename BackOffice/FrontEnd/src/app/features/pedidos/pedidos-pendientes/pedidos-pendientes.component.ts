@@ -7,11 +7,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatChipsModule } from '@angular/material/chips';
+import { MatChipsModule, MatChipOption } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatChipListboxChange, MatChipOption } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -50,7 +49,6 @@ export class PedidosPendientesComponent implements OnInit, OnDestroy {
   filteredPedidos: Pedido[] = [];
   isLoading = false;
 
-  // Computed properties for statistics
   get pedidosPendientes(): number {
     return this.pedidos?.filter(p => p.estado === 'pendiente')?.length || 0;
   }
@@ -59,12 +57,10 @@ export class PedidosPendientesComponent implements OnInit, OnDestroy {
     return this.pedidos?.filter(p => p.estado === 'procesando')?.length || 0;
   }
 
-  // Filtros
   searchControl = new FormControl('');
   estadoFilter = new FormControl<EstadoPedido | 'todos'>('todos');
   fechaFilter = new FormControl<Date | null>(null);
 
-  // Tabla
   displayedColumns: string[] = [
     'id',
     'clienteNombre',
@@ -74,7 +70,6 @@ export class PedidosPendientesComponent implements OnInit, OnDestroy {
     'acciones',
   ];
 
-  // Auto-refresh
   private refreshInterval: any;
   private readonly refreshTime = environment.autoRefreshInterval;
 
@@ -133,7 +128,6 @@ export class PedidosPendientesComponent implements OnInit, OnDestroy {
   applyFilters(): void {
     let filtered = [...this.pedidos];
 
-    // Filtro de búsqueda
     const searchTerm = this.searchControl.value?.toLowerCase();
     if (searchTerm) {
       filtered = filtered.filter(
@@ -143,12 +137,10 @@ export class PedidosPendientesComponent implements OnInit, OnDestroy {
       );
     }
 
-    // Filtro de estado
     if (this.estadoFilter.value && this.estadoFilter.value !== 'todos') {
       filtered = filtered.filter(pedido => pedido.estado === this.estadoFilter.value);
     }
 
-    // Filtro de fecha
     if (this.fechaFilter.value) {
       const filterDate = new Date(this.fechaFilter.value);
       filtered = filtered.filter(pedido => {
@@ -161,24 +153,25 @@ export class PedidosPendientesComponent implements OnInit, OnDestroy {
   }
 
   marcarComoListo(pedido: Pedido): void {
+    const telefono = pedido.telefonoCliente || prompt('Teléfono del cliente');
+    if (!telefono) {
+      return;
+    }
     this.pedidosService.marcarComoListo(pedido.id).subscribe({
       next: () => {
-        this.notificationService.showSuccess(`Pedido #${pedido.id} marcado como listo`);
-        this.loadPedidos(); // Recargar lista
+        this.pedidosService.getWhatsAppLink(pedido.id, telefono).subscribe({
+          next: (response) => {
+            window.open(response.link, '_blank');
+            this.notificationService.showSuccess(`Pedido #${pedido.id} marcado como listo`);
+            this.loadPedidos();
+          },
+          error: (error) => {
+            this.notificationService.showError('Error al generar enlace de WhatsApp: ' + error.message);
+          },
+        });
       },
-      error: error => {
+      error: (error) => {
         this.notificationService.showError('Error al marcar pedido como listo: ' + error.message);
-      },
-    });
-  }
-
-  abrirWhatsApp(pedido: Pedido): void {
-    this.pedidosService.getWhatsAppLink(pedido.id).subscribe({
-      next: response => {
-        window.open(response.link, '_blank');
-      },
-      error: error => {
-        this.notificationService.showError('Error al generar enlace de WhatsApp: ' + error.message);
       },
     });
   }
@@ -187,7 +180,7 @@ export class PedidosPendientesComponent implements OnInit, OnDestroy {
     window.open(url, '_blank');
   }
 
-  getFileIcon(tipo: string): string {
+  getFileIcon(tipo: string = ''): string {
     if (tipo.includes('pdf')) return 'picture_as_pdf';
     if (tipo.includes('image')) return 'image';
     if (tipo.includes('word')) return 'description';
@@ -196,7 +189,7 @@ export class PedidosPendientesComponent implements OnInit, OnDestroy {
     return 'insert_drive_file';
   }
 
-  getFileSize(size: number): string {
+  getFileSize(size: number = 0): string {
     if (size < 1024) return size + ' B';
     if (size < 1024 * 1024) return (size / 1024).toFixed(1) + ' KB';
     return (size / (1024 * 1024)).toFixed(1) + ' MB';

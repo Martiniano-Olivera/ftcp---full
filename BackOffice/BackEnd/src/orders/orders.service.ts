@@ -14,7 +14,8 @@ export class OrdersService {
 
   // Crear un nuevo pedido
   async createOrder(createOrderDto: CreateOrderDto): Promise<Order> {
-    const order = this.orderRepository.create(createOrderDto);
+    const mapped = { ...createOrderDto, archivos: createOrderDto.archivos.map(a => ({ nombre: a.nombre, urlDrive: a.url })) };
+    const order = this.orderRepository.create(mapped);
     return await this.orderRepository.save(order);
   }
 
@@ -50,11 +51,13 @@ export class OrdersService {
   }
 
   // Generar link de WhatsApp para un pedido
-  async generateWhatsAppLink(orderId: string): Promise<string> {
+  async generateWhatsAppLink(orderId: string, phone?: string): Promise<string> {
     const order = await this.getOrderById(orderId);
-    const message = `Hola ${order.clienteNombre}! Tu pedido está listo. Puedes retirarlo en la fotocopiadora.`;
+    const targetPhone = phone || order.clienteTelefono;
+    const firstFile = order.archivos?.[0]?.urlDrive || "";
+    const message = `Hola ${order.clienteNombre}! Tu pedido está listo para retirar. Detalle: ${firstFile}. ¡Gracias!`;
     const encodedMessage = encodeURIComponent(message);
-    return `https://wa.me/${order.clienteTelefono}?text=${encodedMessage}`;
+    return `https://wa.me/${targetPhone}?text=${encodedMessage}`;
   }
 
   // Actualizar un pedido
