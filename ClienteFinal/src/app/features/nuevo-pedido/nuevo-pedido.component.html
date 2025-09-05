@@ -1,0 +1,16 @@
+<form [formGroup]="form" (ngSubmit)="enviar()">
+  <div>
+    <label>Nombre:</label>
+    <input type="text" formControlName="nombre" />
+  </div>
+  <div>
+    <label>Teléfono:</label>
+    <input type="tel" formControlName="telefono" />
+  </div>
+  <div>
+    <label>Archivos:</label>
+    <input type="file" multiple (change)="onFileChange($event)" />
+  </div>
+  <button type="submit" [disabled]="form.invalid">Enviar</button>
+</form>
+<p *ngIf="enviado">Pedido enviado</p>

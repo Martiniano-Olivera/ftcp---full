@@ -17,6 +17,13 @@ export const routes: Routes = [
       import('./features/pago/pago.routes').then((m) => m.pagoRoutes),
   },
   {
+    path: 'nuevo',
+    loadComponent: () =>
+      import('./features/nuevo-pedido/nuevo-pedido.component').then(
+        (m) => m.NuevoPedidoComponent,
+      ),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

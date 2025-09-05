@@ -173,7 +173,15 @@ export class PedidosPendientesComponent implements OnInit, OnDestroy {
   }
 
   abrirWhatsApp(pedido: Pedido): void {
-    this.pedidosService.getWhatsAppLink(pedido.id).subscribe({
+    let phone = pedido.telefonoCliente;
+    if (!phone) {
+      phone = prompt('Ingrese teléfono del cliente') || '';
+    }
+    if (!phone) {
+      this.notificationService.showError('Teléfono no proporcionado');
+      return;
+    }
+    this.pedidosService.getWhatsAppLink(pedido.id, phone).subscribe({
       next: response => {
         window.open(response.link, '_blank');
       },
