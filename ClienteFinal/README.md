@@ -90,6 +90,10 @@ npm start
 npm run build
 ```
 
+### Configurar `environment.ts`
+
+El archivo `src/environments/environment.ts` define `apiUrl`. En desarrollo apunta por defecto a `http://localhost:3000`, ajusta este valor si tu backend corre en otra URL.
+
 ### Comandos Disponibles
 
 - `npm start`: Ejecuta la aplicación en modo desarrollo
@@ -123,6 +127,10 @@ npm run build
 5. **Revisar**: Ve resumen del pedido
 6. **Pagar**: Completa el proceso de pago
 7. **Confirmación**: Recibe confirmación de éxito
+
+## 📬 Enviar pedido
+
+En la sección "Nuevo Pedido" completa tu nombre, teléfono y selecciona uno o más PDFs. El botón **Enviar** sube los archivos al backend y crea un pedido. Si todo sale bien verás el mensaje "¡Pedido enviado!".
 
 ## 🔧 Configuración
 

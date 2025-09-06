@@ -45,15 +45,16 @@ export class OrdersController {
   )
   @ApiOperation({ summary: 'Subir archivos a Supabase Storage' })
   async uploadFiles(@UploadedFiles() files: Express.Multer.File[]) {
+    await this.storageService.ensureBucket();
     const uploads = await Promise.all(
       files.map(async file => {
         const now = new Date();
-        const folder = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+        const folder = `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, '0')}/${String(
+          now.getDate(),
+        ).padStart(2, '0')}`;
         const filename = `${randomUUID()}-${file.originalname}`;
-        const path = `orders/${folder}/${filename}`;
-        await this.storageService.uploadFile(file.buffer, path, file.mimetype);
-        const url = this.storageService.getPublicUrl(path);
-        // TODO: usar createSignedUrl si el bucket es privado
+        const path = `${folder}/${filename}`;
+        const { url } = await this.storageService.uploadFile(file, path);
         return { nombre: file.originalname, path, url };
       }),
     );

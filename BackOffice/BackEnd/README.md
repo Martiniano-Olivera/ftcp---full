@@ -71,7 +71,7 @@ Variables principales:
 - `DATABASE_URL`: conexión al pooler de Supabase (`pgbouncer=true`, puerto 6543, `sslmode=require`) utilizada en tiempo de ejecución.
 - `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`.
 - `JWT_SECRET`, `JWT_EXPIRES_IN`.
-- `PORT`, `CORS_ORIGIN`.
+- `PORT`, `CORS_ORIGIN` (agrega la URL del frontend público si corre en otro puerto).
 
 ### 3. Ejecutar migraciones
 Las migraciones se ejecutan contra la conexión directa (5432):
@@ -217,6 +217,21 @@ Este proyecto es privado y confidencial.
 ## 🆘 Soporte
 
 Para soporte técnico, contactar al equipo de desarrollo.
+
+## 📢 Endpoint público de pedidos
+
+El frontend público puede crear pedidos sin autenticación mediante `POST /public/orders`.
+
+Ejemplo en PowerShell:
+
+```powershell
+$form = @{
+clienteNombre = "Cliente QA"
+clienteTelefono = "1122334455"
+files = Get-Item "C:\ruta\archivo1.pdf", "C:\ruta\archivo2.pdf"
+}
+Invoke-RestMethod -Uri http://localhost:3000/public/orders -Method Post -Form $form
+```
 
 ---
 

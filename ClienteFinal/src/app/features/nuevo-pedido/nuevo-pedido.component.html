@@ -1,20 +1,41 @@
 <div *ngIf="!enviado; else enviadoTpl">
-  <form (ngSubmit)="enviar()" #form="ngForm">
+  <form (ngSubmit)="enviar(form)" #form="ngForm">
     <label>
       Nombre:
       <input type="text" name="nombre" [(ngModel)]="nombre" required />
     </label>
     <label>
       Teléfono:
-      <input type="tel" name="telefono" [(ngModel)]="telefono" required />
+      <input
+        type="tel"
+        name="telefono"
+        [(ngModel)]="telefono"
+        required
+        pattern="\d{6,20}"
+      />
     </label>
     <label>
       Archivos:
-      <input type="file" (change)="onFileChange($event)" multiple />
+      <input
+        type="file"
+        accept="application/pdf"
+        (change)="onFileChange($event)"
+        multiple
+      />
     </label>
-    <button type="submit" [disabled]="loading">Enviar</button>
+    <ul>
+      <li *ngFor="let f of archivos">{{ f.name }} ({{ f.size / 1024 / 1024 | number:'1.2-2' }} MB)</li>
+    </ul>
+    <div *ngFor="let e of fileErrors" class="error">{{ e }}</div>
+    <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+    <button
+      type="submit"
+      [disabled]="loading || form.invalid || archivos.length === 0 || fileErrors.length > 0"
+    >
+      {{ loading ? 'Enviando...' : 'Enviar' }}
+    </button>
   </form>
 </div>
 <ng-template #enviadoTpl>
-  <p>Pedido enviado</p>
+  <p>¡Pedido enviado!</p>
 </ng-template>

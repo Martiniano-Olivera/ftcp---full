@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 @Injectable()
 export class SupabaseStorageService {
   private readonly client: SupabaseClient;
   private readonly bucket: string;
+  private readonly logger = new Logger(SupabaseStorageService.name);
 
   constructor() {
     const url = process.env.SUPABASE_URL as string;
@@ -13,31 +14,39 @@ export class SupabaseStorageService {
     this.client = createClient(url, serviceKey);
   }
 
+  async ensureBucket(bucket = this.bucket): Promise<void> {
+    try {
+      const { data, error } = await this.client.storage.getBucket(bucket);
+      if (!data || error) {
+        const { error: createError } = await this.client.storage.createBucket(
+          bucket,
+          { public: true },
+        );
+        if (createError) throw createError;
+      }
+    } catch (err) {
+      this.logger.error(`Error ensuring bucket ${bucket}`, err as any);
+      throw err;
+    }
+  }
+
   async uploadFile(
-    buffer: Buffer,
+    file: Express.Multer.File,
     path: string,
-    contentType: string,
-  ): Promise<void> {
-    const { error } = await this.client.storage
-      .from(this.bucket)
-      .upload(path, buffer, { contentType });
-    if (error) {
-      throw error;
+    bucket = this.bucket,
+  ): Promise<{ url: string }> {
+    try {
+      const { error } = await this.client.storage
+        .from(bucket)
+        .upload(path, file.buffer, {
+          contentType: file.mimetype,
+        });
+      if (error) throw error;
+      const { data } = this.client.storage.from(bucket).getPublicUrl(path);
+      return { url: data.publicUrl };
+    } catch (err) {
+      this.logger.error(`Error uploading file to ${path}`, err as any);
+      throw err;
     }
-  }
-
-  getPublicUrl(path: string): string {
-    const { data } = this.client.storage.from(this.bucket).getPublicUrl(path);
-    return data.publicUrl;
-  }
-
-  async createSignedUrl(path: string, expiresIn: number): Promise<string> {
-    const { data, error } = await this.client.storage
-      .from(this.bucket)
-      .createSignedUrl(path, expiresIn);
-    if (error) {
-      throw error;
-    }
-    return data.signedUrl;
   }
 }
