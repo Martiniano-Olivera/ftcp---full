@@ -6,15 +6,21 @@
     </label>
     <label>
       Teléfono:
-      <input type="tel" name="telefono" [(ngModel)]="telefono" required />
+      <input type="tel" name="telefono" [(ngModel)]="telefono" required pattern="\d{6,20}" />
     </label>
     <label>
       Archivos:
-      <input type="file" (change)="onFileChange($event)" multiple />
+      <input type="file" (change)="onFileChange($event)" multiple accept="application/pdf" required />
     </label>
-    <button type="submit" [disabled]="loading">Enviar</button>
+    <ul>
+      <li *ngFor="let f of archivos">{{ f.name }} ({{ f.size / 1024 | number:'1.0-0' }} KB)</li>
+    </ul>
+    <p *ngIf="error" class="error">{{ error }}</p>
+    <button type="submit" [disabled]="form.invalid || archivos.length === 0 || loading">
+      {{ loading ? 'Enviando...' : 'Enviar pedido' }}
+    </button>
   </form>
 </div>
 <ng-template #enviadoTpl>
-  <p>Pedido enviado</p>
+  <p>¡Pedido enviado! ID: {{ orderId }}</p>
 </ng-template>

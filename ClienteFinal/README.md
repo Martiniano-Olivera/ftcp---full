@@ -90,6 +90,14 @@ npm start
 npm run build
 ```
 
+### Configuración de entorno
+
+Edita `src/environments/environment.ts` y ajusta `apiUrl` si el backend corre en otro host o puerto (por defecto `http://localhost:3000`).
+
+### Enviar un pedido
+
+En la pantalla de nuevo pedido completá nombre, teléfono y seleccioná uno o más PDFs. Al hacer clic en **Enviar pedido** los archivos se envían al backend y se muestra el ID del pedido creado.
+
 ### Comandos Disponibles
 
 - `npm start`: Ejecuta la aplicación en modo desarrollo
