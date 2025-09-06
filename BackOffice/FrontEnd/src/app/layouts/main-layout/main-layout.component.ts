@@ -36,7 +36,6 @@ import { environment } from '../../../environments/environment';
 })
 export class MainLayoutComponent implements OnInit, OnDestroy {
   isLoading = false;
-  currentUser: any = null;
   appName = environment.appName;
   appVersion = environment.version;
 
@@ -47,8 +46,6 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser();
-
     // Usar el signal directamente
     this.isLoading = this.loadingService.getLoadingState();
 
@@ -62,6 +59,7 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
   getCurrentRoute(): string {
