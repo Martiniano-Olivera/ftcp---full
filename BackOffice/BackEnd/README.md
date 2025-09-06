@@ -72,6 +72,7 @@ Variables principales:
 - `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`.
 - `JWT_SECRET`, `JWT_EXPIRES_IN`.
 - `PORT`, `CORS_ORIGIN`.
+  - En producción agrega el origen del front público (ej: `http://localhost:4200`) a `CORS_ORIGIN` si corre en otro puerto.
 
 ### 3. Ejecutar migraciones
 Las migraciones se ejecutan contra la conexión directa (5432):
@@ -154,6 +155,17 @@ npm run test:e2e
 
 # Test coverage
 npm run test:cov
+```
+
+### Probar endpoint público con PowerShell
+
+```powershell
+$form = @{
+  clienteNombre = "Cliente QA"
+  clienteTelefono = "1122334455"
+  files = Get-Item "C:\ruta\archivo1.pdf", "C:\ruta\archivo2.pdf"
+}
+Invoke-RestMethod -Uri http://localhost:3000/public/orders -Method Post -Form $form
 ```
 
 ## 📝 Scripts Disponibles
