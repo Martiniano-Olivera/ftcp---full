@@ -5,7 +5,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideClientHydration } from '@angular/platform-browser';
 
 import { routes } from './app.routes';
-import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 
@@ -14,7 +14,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(
       withInterceptors([
-        authInterceptor,
+        jwtInterceptor,
         errorInterceptor,
         loadingInterceptor
       ])

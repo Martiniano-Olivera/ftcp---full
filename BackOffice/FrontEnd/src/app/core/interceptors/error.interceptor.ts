@@ -1,13 +1,9 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
-import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
 import { NotificationService } from '../services/notification.service';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
-  const router = inject(Router);
-  const authService = inject(AuthService);
   const notificationService = inject(NotificationService);
 
   return next(req).pipe(
@@ -22,7 +18,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         switch (error.status) {
           case 401:
             errorMessage = 'Sesión expirada. Por favor, inicie sesión nuevamente.';
-            authService.logout();
             break;
           case 403:
             errorMessage = 'No tiene permisos para realizar esta acción.';
