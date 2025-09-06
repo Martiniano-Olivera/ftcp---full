@@ -4,7 +4,7 @@ Sistema de gestión de pedidos de impresión para fotocopiadora, desarrollado en
 
 ## 🚀 Características
 
-- **Autenticación segura** con JWT simulado
+- **Autenticación segura** con JWT real
 - **Gestión de pedidos** pendientes y completados
 - **Filtros avanzados** por cliente, estado y fecha
 - **Integración con WhatsApp** para notificaciones
@@ -54,11 +54,13 @@ La aplicación estará disponible en `http://localhost:4200`
 - **Username**: `admin`
 - **Password**: `demo`
 
+El formulario de login realiza una petición POST a `${environment.apiUrl}/auth/login` y almacena el `access_token` obtenido en `localStorage`.
+
 ## 📱 Funcionalidades
 
 ### Módulo de Autenticación
 - Login con validaciones reactivas
-- JWT simulado almacenado en localStorage
+- JWT almacenado en localStorage tras autenticación real
 - Redirección automática post-autenticación
 - Manejo de errores de login
 
@@ -107,7 +109,7 @@ src/
 ```typescript
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api',
+  apiUrl: 'http://localhost:3000',
   whatsappBaseUrl: 'https://wa.me/',
   autoRefreshInterval: 30000
 };
@@ -117,7 +119,7 @@ export const environment = {
 ```typescript
 export const environment = {
   production: true,
-  apiUrl: 'https://api.fotocopiadora.com/api',
+  apiUrl: 'https://api.fotocopiadora.com',
   whatsappBaseUrl: 'https://wa.me/',
   autoRefreshInterval: 30000
 };

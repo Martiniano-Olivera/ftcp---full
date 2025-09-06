@@ -47,8 +47,6 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser();
-
     // Usar el signal directamente
     this.isLoading = this.loadingService.getLoadingState();
 
@@ -62,6 +60,7 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
   getCurrentRoute(): string {

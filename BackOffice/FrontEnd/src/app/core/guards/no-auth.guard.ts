@@ -1,15 +1,16 @@
-import { inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Injectable } from '@angular/core';
+import { CanActivate, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
-export const noAuthGuard = () => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
+@Injectable({ providedIn: 'root' })
+export class NoAuthGuard implements CanActivate {
+  constructor(private auth: AuthService, private router: Router) {}
 
-  if (authService.isAuthenticated()) {
-    router.navigate(['/pedidos/pendientes']);
-    return false;
+  canActivate(): boolean {
+    if (this.auth.isLoggedIn()) {
+      this.router.navigate(['/pedidos/pendientes']);
+      return false;
+    }
+    return true;
   }
-
-  return true;
-};
+}
