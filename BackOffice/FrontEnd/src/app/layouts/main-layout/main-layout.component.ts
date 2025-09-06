@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -34,9 +34,8 @@ import { environment } from '../../../environments/environment';
   templateUrl: './main-layout.component.html',
   styleUrls: ['./main-layout.component.scss'],
 })
-export class MainLayoutComponent implements OnInit, OnDestroy {
+export class MainLayoutComponent implements OnInit {
   isLoading = false;
-  currentUser: any = null;
   appName = environment.appName;
   appVersion = environment.version;
 
@@ -47,21 +46,12 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser();
-
-    // Usar el signal directamente
     this.isLoading = this.loadingService.getLoadingState();
-
-    // Si necesitamos reactividad, podemos usar un effect o computed
-    // Por ahora, usamos el método directo
-  }
-
-  ngOnDestroy(): void {
-    // Cleanup si es necesario
   }
 
   logout(): void {
     this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
   getCurrentRoute(): string {
