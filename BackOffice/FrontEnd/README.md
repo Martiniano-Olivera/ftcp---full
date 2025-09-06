@@ -4,7 +4,7 @@ Sistema de gestión de pedidos de impresión para fotocopiadora, desarrollado en
 
 ## 🚀 Características
 
-- **Autenticación segura** con JWT simulado
+ - **Autenticación segura** con JWT real
 - **Gestión de pedidos** pendientes y completados
 - **Filtros avanzados** por cliente, estado y fecha
 - **Integración con WhatsApp** para notificaciones
@@ -54,11 +54,17 @@ La aplicación estará disponible en `http://localhost:4200`
 - **Username**: `admin`
 - **Password**: `demo`
 
+### Flujo de login
+1. Enviar `POST ${environment.apiUrl}/auth/login` con `{ username, password }`.
+2. Guardar el `access_token` recibido en `localStorage` bajo la clave `token`.
+3. Todas las peticiones incluyen `Authorization: Bearer <token>`.
+4. Si el backend responde con **401**, el token se elimina y el usuario es redirigido a `/login`.
+
 ## 📱 Funcionalidades
 
 ### Módulo de Autenticación
 - Login con validaciones reactivas
-- JWT simulado almacenado en localStorage
+ - JWT real almacenado en localStorage
 - Redirección automática post-autenticación
 - Manejo de errores de login
 
@@ -107,7 +113,7 @@ src/
 ```typescript
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api',
+  apiUrl: 'http://localhost:3000',
   whatsappBaseUrl: 'https://wa.me/',
   autoRefreshInterval: 30000
 };
@@ -117,7 +123,7 @@ export const environment = {
 ```typescript
 export const environment = {
   production: true,
-  apiUrl: 'https://api.fotocopiadora.com/api',
+  apiUrl: 'https://api.fotocopiadora.com',
   whatsappBaseUrl: 'https://wa.me/',
   autoRefreshInterval: 30000
 };
@@ -192,14 +198,14 @@ El frontend está preparado para conectarse con un backend NestJS:
 ### Endpoints Esperados
 ```typescript
 // Autenticación
-POST /api/auth/login
-POST /api/auth/logout
+POST /auth/login
+POST /auth/logout
 
 // Pedidos
-GET /api/orders/pending
-GET /api/orders/completed
-PATCH /api/orders/:id/ready
-GET /api/orders/:id/whatsapp-link
+GET /orders
+GET /orders/all
+PATCH /orders/:id/ready
+GET /orders/:id/whatsapp-link
 ```
 
 ### Estructura de Respuesta
