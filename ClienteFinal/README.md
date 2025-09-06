@@ -54,6 +54,8 @@ src/app/
 - Botón CTA para comenzar pedido
 - Diseño atractivo y moderno
 
+En la ruta `/nuevo-pedido` se encuentra un formulario sencillo donde el cliente puede ingresar nombre, teléfono y cargar archivos PDF para enviarlos al backend mediante el botón **Enviar**.
+
 ### 2. Wizard de Pedidos
 
 - **Paso 1**: Selección de archivos con drag & drop
@@ -128,7 +130,7 @@ npm run build
 
 ### Variables de Entorno
 
-La aplicación está configurada para desarrollo local por defecto.
+La aplicación está configurada para desarrollo local por defecto. El endpoint de API se toma de `src/environments/environment.ts` (o de la variable `NG_APP_API_URL`). En desarrollo suele ser `http://localhost:3000`.
 
 ### Personalización
 
