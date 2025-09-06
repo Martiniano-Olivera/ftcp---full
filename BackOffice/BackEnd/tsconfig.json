@@ -8,6 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true, // 👈 añade esto
     "moduleResolution": "node", // 👈 añade esto
+    "types": ["node", "multer"],
     "target": "ES2020",
     "sourceMap": true,
     "outDir": "./dist",

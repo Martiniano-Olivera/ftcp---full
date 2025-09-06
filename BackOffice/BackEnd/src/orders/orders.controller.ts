@@ -40,17 +40,19 @@ export class OrdersController {
   ) {}
 
   @Post('upload')
-  @UseInterceptors(FilesInterceptor('file', undefined, { storage: memoryStorage() }))
+  @UseInterceptors(
+    FilesInterceptor('file', undefined, { storage: memoryStorage() }),
+  )
   @ApiOperation({ summary: 'Subir archivos a Supabase Storage' })
   async uploadFiles(@UploadedFiles() files: Express.Multer.File[]) {
     const uploads = await Promise.all(
-      files.map(async (file) => {
+      files.map(async file => {
         const now = new Date();
         const folder = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
         const filename = `${randomUUID()}-${file.originalname}`;
         const path = `orders/${folder}/${filename}`;
         await this.storageService.uploadFile(file.buffer, path, file.mimetype);
-        let url = this.storageService.getPublicUrl(path);
+        const url = this.storageService.getPublicUrl(path);
         // TODO: usar createSignedUrl si el bucket es privado
         return { nombre: file.originalname, path, url };
       }),
@@ -60,7 +62,11 @@ export class OrdersController {
 
   @Post()
   @ApiOperation({ summary: 'Crear un nuevo pedido' })
-  @ApiResponse({ status: 201, description: 'Pedido creado exitosamente', type: Order })
+  @ApiResponse({
+    status: 201,
+    description: 'Pedido creado exitosamente',
+    type: Order,
+  })
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
   async createOrder(@Body() createOrderDto: CreateOrderDto): Promise<Order> {
     return await this.ordersService.createOrder(createOrderDto);
@@ -68,14 +74,22 @@ export class OrdersController {
 
   @Get()
   @ApiOperation({ summary: 'Obtener todos los pedidos pendientes' })
-  @ApiResponse({ status: 200, description: 'Lista de pedidos pendientes', type: [Order] })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de pedidos pendientes',
+    type: [Order],
+  })
   async getPendingOrders(): Promise<Order[]> {
     return await this.ordersService.getPendingOrders();
   }
 
   @Get('all')
   @ApiOperation({ summary: 'Obtener todos los pedidos' })
-  @ApiResponse({ status: 200, description: 'Lista completa de pedidos', type: [Order] })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista completa de pedidos',
+    type: [Order],
+  })
   async getAllOrders(): Promise<Order[]> {
     return await this.ordersService.getAllOrders();
   }
@@ -91,7 +105,11 @@ export class OrdersController {
   @Patch(':id/ready')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Marcar pedido como listo' })
-  @ApiResponse({ status: 200, description: 'Pedido marcado como listo', type: Order })
+  @ApiResponse({
+    status: 200,
+    description: 'Pedido marcado como listo',
+    type: Order,
+  })
   @ApiResponse({ status: 404, description: 'Pedido no encontrado' })
   async markOrderAsReady(@Param('id') id: string): Promise<Order> {
     return await this.ordersService.markOrderAsReady(id);
@@ -111,7 +129,11 @@ export class OrdersController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'Actualizar un pedido' })
-  @ApiResponse({ status: 200, description: 'Pedido actualizado exitosamente', type: Order })
+  @ApiResponse({
+    status: 200,
+    description: 'Pedido actualizado exitosamente',
+    type: Order,
+  })
   @ApiResponse({ status: 404, description: 'Pedido no encontrado' })
   async updateOrder(
     @Param('id') id: string,
