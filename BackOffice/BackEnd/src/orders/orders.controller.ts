@@ -51,8 +51,7 @@ export class OrdersController {
         const folder = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
         const filename = `${randomUUID()}-${file.originalname}`;
         const path = `orders/${folder}/${filename}`;
-        await this.storageService.uploadFile(file.buffer, path, file.mimetype);
-        const url = this.storageService.getPublicUrl(path);
+        const { url } = await this.storageService.uploadFile(file, path);
         // TODO: usar createSignedUrl si el bucket es privado
         return { nombre: file.originalname, path, url };
       }),

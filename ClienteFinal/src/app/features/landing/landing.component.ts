@@ -13,6 +13,6 @@ export class LandingComponent {
   constructor(private router: Router) {}
 
   hacerPedido(): void {
-    this.router.navigate(['/pedido']);
+    this.router.navigate(['/nuevo-pedido']);
   }
 }

@@ -129,6 +129,9 @@ npm run build
 ### Variables de Entorno
 
 La aplicación está configurada para desarrollo local por defecto.
+Para apuntar a otra API en desarrollo, edita `src/environments/environment.ts` y ajusta `apiUrl` (por defecto `http://localhost:3000`).
+
+En la pantalla de "Nuevo Pedido", el botón **Enviar pedido** valida los datos, sube los PDFs al backend y muestra la confirmación.
 
 ### Personalización
 

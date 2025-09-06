@@ -73,6 +73,8 @@ Variables principales:
 - `JWT_SECRET`, `JWT_EXPIRES_IN`.
 - `PORT`, `CORS_ORIGIN`.
 
+En producción agrega la URL del frontend público en `CORS_ORIGIN` (separadas por comas si hay varias) para habilitar CORS.
+
 ### 3. Ejecutar migraciones
 Las migraciones se ejecutan contra la conexión directa (5432):
 ```bash
@@ -154,6 +156,19 @@ npm run test:e2e
 
 # Test coverage
 npm run test:cov
+```
+
+### Probar endpoint público
+
+PowerShell:
+
+```powershell
+$form = @{
+clienteNombre = "Cliente QA"
+clienteTelefono = "1122334455"
+files = Get-Item "C:\ruta\archivo1.pdf", "C:\ruta\archivo2.pdf"
+}
+Invoke-RestMethod -Uri http://localhost:3000/public/orders -Method Post -Form $form
 ```
 
 ## 📝 Scripts Disponibles
