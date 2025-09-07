@@ -13,6 +13,9 @@ export class FileUploadComponent {
   @Input() archivos: Archivo[] = [];
   @Output() archivoAgregado = new EventEmitter<Archivo>();
   @Output() archivoEliminado = new EventEmitter<string>();
+  @Output() filesSelected = new EventEmitter<File[]>();
+
+  private _files: File[] = [];
 
   isDragOver = false;
 
@@ -44,11 +47,18 @@ export class FileUploadComponent {
     const files = target.files;
     if (files) {
       this.procesarArchivos(files);
+      // reset opcional del input si lo necesitás
+      // target.value = '';
     }
   }
 
   private procesarArchivos(files: FileList): void {
-    Array.from(files).forEach((file) => {
+    const nuevos = Array.from(files);
+    // 1) Guardar los File para FormData
+    this._files.push(...nuevos);
+
+    // 2) Emitir metadatos
+    nuevos.forEach(file => {
       const archivo: Archivo = {
         id: this.generarId(),
         nombre: file.name,
@@ -58,6 +68,9 @@ export class FileUploadComponent {
       };
       this.archivoAgregado.emit(archivo);
     });
+
+    // 3) Emitir también los File reales
+    this.filesSelected.emit([...this._files]);
   }
 
   private generarId(): string {
@@ -69,6 +82,11 @@ export class FileUploadComponent {
   }
 
   eliminarArchivo(archivoId: string): void {
+    const archivo = this.archivos.find(a => a.id === archivoId);
+    if (archivo) {
+      this._files = this._files.filter(f => f.name !== archivo.nombre);
+      this.filesSelected.emit([...this._files]);
+    }
     this.archivoEliminado.emit(archivoId);
   }
 
