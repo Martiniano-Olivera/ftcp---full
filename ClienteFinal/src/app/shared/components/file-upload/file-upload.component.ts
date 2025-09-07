@@ -13,7 +13,9 @@ export class FileUploadComponent {
   @Input() archivos: Archivo[] = [];
   @Output() archivoAgregado = new EventEmitter<Archivo>();
   @Output() archivoEliminado = new EventEmitter<string>();
+  @Output() filesSelected = new EventEmitter<File[]>();
 
+  private _files: File[] = [];
   isDragOver = false;
 
   onDragOver(event: DragEvent): void {
@@ -40,15 +42,26 @@ export class FileUploadComponent {
   }
 
   onFileSelected(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    const files = target.files;
-    if (files) {
-      this.procesarArchivos(files);
-    }
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+    this.procesarArchivos(input.files);
+    // input.value = '';
   }
 
   private procesarArchivos(files: FileList): void {
-    Array.from(files).forEach((file) => {
+    const nuevos = Array.from(files);
+
+    // 1) Guardar los File para FormData
+    const validos: File[] = [];
+    nuevos.forEach(f => {
+      if (f.type === 'application/pdf' && f.size <= 15 * 1024 * 1024) {
+        validos.push(f);
+      }
+    });
+    this._files.push(...validos);
+
+    // 2) Emitir metadatos (lo que ya hacías)
+    validos.forEach((file) => {
       const archivo: Archivo = {
         id: this.generarId(),
         nombre: file.name,
@@ -58,6 +71,9 @@ export class FileUploadComponent {
       };
       this.archivoAgregado.emit(archivo);
     });
+
+    // 3) Emitir también los File reales
+    this.filesSelected.emit([...this._files]);
   }
 
   private generarId(): string {
@@ -68,8 +84,10 @@ export class FileUploadComponent {
     return nombre.split('.').pop()?.toLowerCase() || 'unknown';
   }
 
-  eliminarArchivo(archivoId: string): void {
-    this.archivoEliminado.emit(archivoId);
+  eliminarArchivoPorNombre(nombre: string): void {
+    this._files = this._files.filter(f => f.name !== nombre);
+    this.filesSelected.emit([...this._files]);
+    this.archivoEliminado.emit(nombre);
   }
 
   formatFileSize(bytes: number): string {
