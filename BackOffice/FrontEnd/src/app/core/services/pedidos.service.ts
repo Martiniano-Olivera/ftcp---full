@@ -12,7 +12,7 @@ export class PedidosService {
 
   constructor(private http: HttpClient) {}
 
-  getPedidosPendientes(): Observable<Pedido[]> {
+  getPending(): Observable<Pedido[]> {
     this.isLoading.set(true);
     return this.http
       .get<Pedido[]>(`${environment.apiUrl}/orders`)
@@ -42,6 +42,6 @@ export class PedidosService {
   }
 
   refreshPedidos(): Observable<Pedido[]> {
-    return this.getPedidosPendientes();
+    return this.getPending();
   }
 }

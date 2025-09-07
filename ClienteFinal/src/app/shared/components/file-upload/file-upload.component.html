@@ -10,12 +10,12 @@
     <div class="drop-zone-content">
       <div class="upload-icon">📁</div>
       <h3>Arrastra archivos aquí o haz clic para seleccionar</h3>
-      <p>Soporta PDF, DOC, DOCX, TXT, JPG, PNG</p>
+      <p>Solo PDF (máx 15 MB por archivo)</p>
       <input
         #fileInput
         type="file"
         multiple
-        accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
+        accept="application/pdf,.pdf"
         (change)="onFileSelected($event)"
         style="display: none;"
       />

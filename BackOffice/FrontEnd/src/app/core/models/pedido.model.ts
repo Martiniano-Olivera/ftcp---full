@@ -13,8 +13,8 @@ export interface Pedido {
 export interface Archivo {
   nombre: string;
   url: string;
-  tamano: number;
-  tipo: string;
+  tamano?: number | null;
+  tipo?: string;
 }
 
 export type EstadoPedido = 'pendiente' | 'procesando' | 'listo' | 'completado';

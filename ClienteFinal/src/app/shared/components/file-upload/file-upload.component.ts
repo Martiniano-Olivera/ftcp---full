@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Archivo } from '../../../core/models/pedido.model';
 
@@ -9,12 +9,21 @@ import { Archivo } from '../../../core/models/pedido.model';
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.scss'],
 })
-export class FileUploadComponent {
+export class FileUploadComponent implements OnChanges {
   @Input() archivos: Archivo[] = [];
   @Output() archivoAgregado = new EventEmitter<Archivo>();
   @Output() archivoEliminado = new EventEmitter<string>();
+  @Output() filesSelected = new EventEmitter<File[]>();
+  private _files: File[] = [];
 
   isDragOver = false;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['archivos'] && this.archivos.length === 0) {
+      this._files = [];
+      this.filesSelected.emit([]);
+    }
+  }
 
   onDragOver(event: DragEvent): void {
     event.preventDefault();
@@ -40,15 +49,18 @@ export class FileUploadComponent {
   }
 
   onFileSelected(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    const files = target.files;
-    if (files) {
-      this.procesarArchivos(files);
-    }
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
+    if (!files?.length) return;
+    this.procesarArchivos(files);
+    // input.value = '';
   }
 
   private procesarArchivos(files: FileList): void {
-    Array.from(files).forEach((file) => {
+    const nuevos = Array.from(files);
+    this._files.push(...nuevos);
+
+    nuevos.forEach(file => {
       const archivo: Archivo = {
         id: this.generarId(),
         nombre: file.name,
@@ -58,6 +70,8 @@ export class FileUploadComponent {
       };
       this.archivoAgregado.emit(archivo);
     });
+
+    this.filesSelected.emit([...this._files]);
   }
 
   private generarId(): string {
@@ -69,6 +83,11 @@ export class FileUploadComponent {
   }
 
   eliminarArchivo(archivoId: string): void {
+    const archivo = this.archivos.find(a => a.id === archivoId);
+    if (archivo) {
+      this._files = this._files.filter(f => f.name !== archivo.nombre);
+      this.filesSelected.emit([...this._files]);
+    }
     this.archivoEliminado.emit(archivoId);
   }
 
