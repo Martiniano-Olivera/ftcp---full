@@ -38,7 +38,7 @@ export class PedidoService {
   agregarArchivo(archivo: Archivo): void {
     const pedidoActual = this.pedidoSubject.value;
     if (pedidoActual) {
-      const nuevoPedido = {
+      const nuevoPedido: Pedido = {
         ...pedidoActual,
         archivos: [...pedidoActual.archivos, archivo],
       };
@@ -50,7 +50,7 @@ export class PedidoService {
   eliminarArchivo(archivoId: string): void {
     const pedidoActual = this.pedidoSubject.value;
     if (pedidoActual) {
-      const nuevoPedido = {
+      const nuevoPedido: Pedido = {
         ...pedidoActual,
         archivos: pedidoActual.archivos.filter((a) => a.id !== archivoId),
       };
@@ -62,7 +62,7 @@ export class PedidoService {
   actualizarOpciones(opciones: Partial<OpcionesImpresion>): void {
     const pedidoActual = this.pedidoSubject.value;
     if (pedidoActual) {
-      const nuevoPedido = {
+      const nuevoPedido: Pedido = {
         ...pedidoActual,
         opciones: { ...pedidoActual.opciones, ...opciones },
       };

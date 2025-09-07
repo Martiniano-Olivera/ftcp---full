@@ -16,12 +16,18 @@ export class PedidoArchivosComponent {
   @Output() archivoEliminado = new EventEmitter<string>();
   @Output() siguienteClicked = new EventEmitter<void>();
 
+  files: File[] = [];
+
   onArchivoAgregado(archivo: Archivo): void {
     this.archivoAgregado.emit(archivo);
   }
 
   onArchivoEliminado(archivoId: string): void {
     this.archivoEliminado.emit(archivoId);
+  }
+
+  onFilesSelected(files: File[]): void {
+    this.files = files;
   }
 
   siguiente(): void {
