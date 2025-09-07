@@ -19,6 +19,10 @@ export class PedidosService {
       .pipe(finalize(() => this.isLoading.set(false)));
   }
 
+  getPending(): Observable<Pedido[]> {
+    return this.http.get<Pedido[]>(`${environment.apiUrl}/orders`);
+  }
+
   getPedidosCompletados(): Observable<Pedido[]> {
     this.isLoading.set(true);
     return this.http

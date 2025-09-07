@@ -1,8 +1,6 @@
-declare const process: any;
-
 export const environment = {
   production: true,
-  apiUrl: process.env['NG_APP_API_URL'] || 'https://api.fotocopiadora.com',
+  apiUrl: 'http://localhost:3000',
   whatsappBaseUrl: 'https://wa.me/',
   autoRefreshInterval: 30000,
   appName: 'Fotocopiadora BackOffice',

@@ -13,6 +13,9 @@ export class FileUploadComponent {
   @Input() archivos: Archivo[] = [];
   @Output() archivoAgregado = new EventEmitter<Archivo>();
   @Output() archivoEliminado = new EventEmitter<string>();
+  @Output() filesSelected = new EventEmitter<File[]>();
+
+  private _files: File[] = [];
 
   isDragOver = false;
 
@@ -42,13 +45,15 @@ export class FileUploadComponent {
   onFileSelected(event: Event): void {
     const target = event.target as HTMLInputElement;
     const files = target.files;
-    if (files) {
-      this.procesarArchivos(files);
-    }
+    if (!files?.length) return;
+    this.procesarArchivos(files);
+    // target.value = '';
   }
 
   private procesarArchivos(files: FileList): void {
-    Array.from(files).forEach((file) => {
+    const nuevos = Array.from(files);
+    this._files.push(...nuevos);
+    nuevos.forEach(file => {
       const archivo: Archivo = {
         id: this.generarId(),
         nombre: file.name,
@@ -58,6 +63,7 @@ export class FileUploadComponent {
       };
       this.archivoAgregado.emit(archivo);
     });
+    this.filesSelected.emit([...this._files]);
   }
 
   private generarId(): string {
@@ -69,6 +75,11 @@ export class FileUploadComponent {
   }
 
   eliminarArchivo(archivoId: string): void {
+    const archivo = this.archivos.find(a => a.id === archivoId);
+    if (archivo) {
+      this._files = this._files.filter(f => f.name !== archivo.nombre);
+      this.filesSelected.emit([...this._files]);
+    }
     this.archivoEliminado.emit(archivoId);
   }
 

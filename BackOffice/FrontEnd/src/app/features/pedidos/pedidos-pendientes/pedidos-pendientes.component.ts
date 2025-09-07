@@ -98,13 +98,22 @@ export class PedidosPendientesComponent implements OnInit, OnDestroy {
   loadPedidos(): void {
     this.isLoading = true;
     this.pedidosService.getPedidosPendientes().subscribe({
-      next: pedidos => {
-        this.pedidos = pedidos;
+      next: rows => {
+        this.pedidos = rows.map(o => ({
+          ...o,
+          fechaCreacion: (o as any).fechaCreacion ?? (o as any).createdAt ?? (o as any)['createdAt'],
+          archivos: (o.archivos ?? []).map((a: any) => ({
+            nombre: a.nombre ?? a.fileName ?? 'archivo.pdf',
+            url: a.url,
+            tipo: a.tipo ?? 'pdf',
+            tamano: a.tamano ?? null,
+          })),
+        }));
+        this.filteredPedidos = [...this.pedidos];
         this.applyFilters();
         this.isLoading = false;
       },
-      error: error => {
-        this.notificationService.showError('Error al cargar pedidos: ' + error.message);
+      error: () => {
         this.isLoading = false;
       },
     });
@@ -191,37 +200,23 @@ export class PedidosPendientesComponent implements OnInit, OnDestroy {
   }
 
   abrirArchivo(url: string): void {
-    window.open(url, '_blank');
+    if (url) window.open(url, '_blank', 'noopener');
   }
 
-  getFileIcon(tipo: string): string {
-    if (tipo.includes('pdf')) return 'picture_as_pdf';
-    if (tipo.includes('image')) return 'image';
-    if (tipo.includes('word')) return 'description';
-    if (tipo.includes('powerpoint')) return 'slideshow';
-    if (tipo.includes('excel')) return 'table_chart';
-    return 'insert_drive_file';
+  getFileIcon(tipo?: string): string {
+    return 'picture_as_pdf';
   }
 
-  getFileSize(size: number): string {
-    if (size < 1024) return size + ' B';
-    if (size < 1024 * 1024) return (size / 1024).toFixed(1) + ' KB';
-    return (size / (1024 * 1024)).toFixed(1) + ' MB';
+  getFileSize(t?: number): string {
+    return t ? `${(t / 1024 / 1024).toFixed(2)} MB` : '';
   }
 
-  getEstadoColor(estado: EstadoPedido): string {
-    switch (estado) {
-      case 'pendiente':
-        return 'warn';
-      case 'procesando':
-        return 'primary';
-      case 'listo':
-        return 'accent';
-      case 'completado':
-        return 'primary';
-      default:
-        return 'primary';
-    }
+  getEstadoColor(estado: string): string {
+    const e = (estado || '').toLowerCase();
+    if (e === 'pendiente') return 'warn';
+    if (e === 'procesando') return 'accent';
+    if (e === 'listo') return 'primary';
+    return 'basic';
   }
 
   limpiarFiltros(): void {

@@ -15,8 +15,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([
         jwtInterceptor,
-        errorInterceptor,
-        loadingInterceptor
+        loadingInterceptor,
+        errorInterceptor
       ])
     ),
     provideAnimations(),
