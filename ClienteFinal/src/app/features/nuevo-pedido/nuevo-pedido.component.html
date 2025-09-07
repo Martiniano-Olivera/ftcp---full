@@ -8,15 +8,14 @@
       Teléfono:
       <input type="tel" name="telefono" [(ngModel)]="telefono" required pattern="\d{6,20}" />
     </label>
-    <label>
-      Archivos:
-      <input type="file" (change)="onFileChange($event)" multiple accept="application/pdf" required />
-    </label>
-    <ul>
-      <li *ngFor="let f of archivos">{{ f.name }} ({{ f.size / 1024 | number:'1.0-0' }} KB)</li>
-    </ul>
+    <app-file-upload
+      [archivos]="archivos"
+      (archivoAgregado)="onArchivoAgregado($event)"
+      (archivoEliminado)="onArchivoEliminado($event)"
+      (filesSelected)="onFilesSelected($event)"
+    ></app-file-upload>
     <p *ngIf="error" class="error">{{ error }}</p>
-    <button type="submit" [disabled]="form.invalid || archivos.length === 0 || loading">
+    <button type="submit" [disabled]="form.invalid || files.length === 0 || loading">
       {{ loading ? 'Enviando...' : 'Enviar pedido' }}
     </button>
   </form>
