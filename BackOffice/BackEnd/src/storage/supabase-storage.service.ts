@@ -1,45 +1,66 @@
-import { Injectable, Logger } from '@nestjs/common';
+// src/storage/supabase-storage.service.ts
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 @Injectable()
 export class SupabaseStorageService {
-  private readonly client: SupabaseClient;
-  private readonly logger = new Logger(SupabaseStorageService.name);
+  private client: SupabaseClient;
 
   constructor() {
-    const url = process.env.SUPABASE_URL as string;
-    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY as string;
-    this.client = createClient(url, serviceKey);
+    const url = process.env.SUPABASE_URL!;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+    if (!url || !key) {
+      throw new Error(
+        'SUPABASE_URL o SUPABASE_SERVICE_ROLE_KEY no configurados',
+      );
+    }
+    this.client = createClient(url, key); // service role para escribir en storage
   }
 
-  async ensureBucket(bucket = 'orders'): Promise<void> {
-    try {
-      const { data: existing } = await this.client.storage.getBucket(bucket);
-      if (!existing) {
-        await this.client.storage.createBucket(bucket, { public: true });
-        this.logger.log(`Bucket ${bucket} creado`);
-      } else if (!existing.public) {
-        await this.client.storage.updateBucket(bucket, { public: true });
-        this.logger.log(`Bucket ${bucket} actualizado a público`);
+  async ensureBucket(bucket = 'orders') {
+    const { data: buckets, error: listErr } =
+      await this.client.storage.listBuckets();
+    if (listErr) {
+      // si falla listar, dejamos que el upload arroje error con mensaje claro
+      return;
+    }
+    const exists = buckets?.some(b => b.name === bucket);
+    if (!exists) {
+      const { error: createErr } = await this.client.storage.createBucket(
+        bucket,
+        { public: true },
+      );
+      if (createErr) {
+        throw new InternalServerErrorException(
+          `No se pudo crear bucket: ${createErr.message}`,
+        );
       }
-    } catch (error) {
-      this.logger.error('Error asegurando bucket', error as any);
-      throw error;
     }
   }
 
+  /**
+   * Sube un archivo Multer a Supabase Storage y devuelve su URL pública.
+   */
   async uploadFile(
     file: Express.Multer.File,
     path: string,
     bucket = 'orders',
   ): Promise<{ url: string }> {
-    const { error } = await this.client.storage
+    await this.ensureBucket(bucket);
+
+    const { error: upErr } = await this.client.storage
       .from(bucket)
-      .upload(path, file.buffer, { contentType: file.mimetype });
-    if (error) {
-      this.logger.error('Error subiendo archivo', error);
-      throw error;
+      .upload(path, file.buffer, {
+        upsert: true,
+        contentType: file.mimetype || 'application/pdf',
+      });
+
+    if (upErr) {
+      throw new InternalServerErrorException(
+        `Error subiendo archivo: ${upErr.message}`,
+      );
     }
+
     const { data } = this.client.storage.from(bucket).getPublicUrl(path);
     return { url: data.publicUrl };
   }

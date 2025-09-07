@@ -18,7 +18,9 @@
         </div>
         <div class="detail-item">
           <span class="detail-label">Total a Pagar:</span>
-          <span class="detail-value total-price">${{ pedido.precioEstimado.toFixed(2) }}</span>
+          <span class="detail-value total-price"
+            >${{ pedido.precioEstimado.toFixed(2) }}</span
+          >
         </div>
       </div>
     </div>
@@ -35,7 +37,7 @@
         </div>
         <div class="metodo-status">Disponible</div>
       </div>
-      
+
       <div class="metodo-item">
         <div class="metodo-info">
           <div class="metodo-icon">📱</div>
@@ -46,7 +48,7 @@
         </div>
         <div class="metodo-status">Disponible</div>
       </div>
-      
+
       <div class="metodo-item disabled">
         <div class="metodo-info">
           <div class="metodo-icon">💵</div>
@@ -65,13 +67,17 @@
         Pagar Ahora
       </button>
       <p class="pago-nota">
-        * Al hacer clic en "Pagar Ahora", serás redirigido a una pasarela de pago segura
+        * Al hacer clic en "Pagar Ahora", serás redirigido a una pasarela de
+        pago segura
       </p>
     </div>
   </div>
 
   <div class="error-message" *ngIf="!pedido">
-    <p>❌ No se pudo cargar la información del pedido. Por favor, regresa e intenta nuevamente.</p>
+    <p>
+      ❌ No se pudo cargar la información del pedido. Por favor, regresa e
+      intenta nuevamente.
+    </p>
     <button type="button" class="btn-secondary" (click)="volverInicio()">
       Volver al Inicio
     </button>

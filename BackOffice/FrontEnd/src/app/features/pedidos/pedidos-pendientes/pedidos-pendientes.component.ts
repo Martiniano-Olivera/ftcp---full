@@ -11,14 +11,13 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatChipListboxChange, MatChipOption } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 
 import { PedidosService } from '../../../core/services/pedidos.service';
 import { NotificationService } from '../../../core/services/notification.service';
-import { Pedido } from '../../../core/models/pedido.model';
+import { EstadoPedido, Pedido } from '../../../core/models/pedido.model';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -37,7 +36,6 @@ import { environment } from '../../../../environments/environment';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatTooltipModule,
-    MatChipOption,
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
@@ -101,7 +99,8 @@ export class PedidosPendientesComponent implements OnInit, OnDestroy {
       next: pedidos => {
         this.pedidos = pedidos.map(o => ({
           ...o,
-          fechaCreacion: (o as any).fechaCreacion ?? (o as any).createdAt ?? (o as any)['createdAt'],
+          fechaCreacion:
+            (o as any).fechaCreacion ?? (o as any).createdAt ?? (o as any)['createdAt'],
           archivos: (o.archivos ?? []).map((a: any) => ({
             nombre: a.nombre ?? a.fileName ?? 'archivo.pdf',
             url: a.url,
@@ -125,7 +124,8 @@ export class PedidosPendientesComponent implements OnInit, OnDestroy {
         next: pedidos => {
           this.pedidos = pedidos.map(o => ({
             ...o,
-            fechaCreacion: (o as any).fechaCreacion ?? (o as any).createdAt ?? (o as any)['createdAt'],
+            fechaCreacion:
+              (o as any).fechaCreacion ?? (o as any).createdAt ?? (o as any)['createdAt'],
             archivos: (o.archivos ?? []).map((a: any) => ({
               nombre: a.nombre ?? a.fileName ?? 'archivo.pdf',
               url: a.url,

@@ -8,6 +8,7 @@
     [archivos]="archivos"
     (archivoAgregado)="onArchivoAgregado($event)"
     (archivoEliminado)="onArchivoEliminado($event)"
+    (filesSelected)="pedidoService.setFiles($event)"
   ></app-file-upload>
 
   <div class="step-actions">
@@ -23,8 +24,8 @@
 
   <div class="help-text" *ngIf="archivos.length === 0">
     <p>
-      💡 <strong>Consejo:</strong> Puedes arrastrar múltiples archivos a la
-      vez o hacer clic para seleccionarlos individualmente.
+      💡 <strong>Consejo:</strong> Puedes arrastrar múltiples archivos a la vez
+      o hacer clic para seleccionarlos individualmente.
     </p>
   </div>
 </div>

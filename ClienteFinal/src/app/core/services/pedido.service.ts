@@ -8,6 +8,8 @@ import { Archivo, OpcionesImpresion, Pedido } from '../models/pedido.model';
 export class PedidoService {
   private pedidoSubject = new BehaviorSubject<Pedido | null>(null);
   public pedido$ = this.pedidoSubject.asObservable();
+  // pedido.service.ts
+  private _files: File[] = [];
 
   constructor() {
     this.inicializarPedido();
@@ -33,6 +35,13 @@ export class PedidoService {
 
   private generarId(): string {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
+  }
+
+  setFiles(files: File[]) {
+    this._files = files;
+  }
+  getFiles(): File[] {
+    return this._files;
   }
 
   agregarArchivo(archivo: Archivo): void {
