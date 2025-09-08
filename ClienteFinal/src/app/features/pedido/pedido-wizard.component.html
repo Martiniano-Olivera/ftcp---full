@@ -39,12 +39,7 @@
 
   <div class="wizard-content">
     <div *ngIf="pasoActual === 1">
-      <app-pedido-archivos
-        [archivos]="pedido?.archivos || []"
-        (archivoAgregado)="onArchivoAgregado($event)"
-        (archivoEliminado)="onArchivoEliminado($event)"
-        (siguienteClicked)="siguientePaso()"
-      ></app-pedido-archivos>
+      <app-pedido-archivos></app-pedido-archivos>
     </div>
 
     <div *ngIf="pasoActual === 2">
