@@ -12,7 +12,7 @@ import { Archivo } from '../../../core/models/pedido.model';
 export class FileUploadComponent {
   @Input() archivos: Archivo[] = [];
   @Output() archivoAgregado = new EventEmitter<Archivo>();
-  @Output() archivoEliminado = new EventEmitter<string>();
+  @Output() archivoEliminado = new EventEmitter<{ id: string; nombre: string }>();
   @Output() filesSelected = new EventEmitter<File[]>();
 
   private _files: File[] = [];
@@ -86,8 +86,10 @@ export class FileUploadComponent {
     if (archivo) {
       this._files = this._files.filter(f => f.name !== archivo.nombre);
       this.filesSelected.emit([...this._files]);
+      this.archivoEliminado.emit({ id: archivoId, nombre: archivo.nombre });
+    } else {
+      this.archivoEliminado.emit({ id: archivoId, nombre: '' });
     }
-    this.archivoEliminado.emit(archivoId);
   }
 
   formatFileSize(bytes: number): string {
