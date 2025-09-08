@@ -8,7 +8,7 @@
     [archivos]="archivos"
     (archivoAgregado)="onArchivoAgregado($event)"
     (archivoEliminado)="onArchivoEliminado($event)"
-    (filesSelected)="pedidoService.setFiles($event)"
+    (filesSelected)="onFilesSelected($event)"
   ></app-file-upload>
 
   <div class="step-actions">
