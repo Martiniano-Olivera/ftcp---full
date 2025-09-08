@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Archivo } from '../../core/models/pedido.model';
+import { PedidoService } from '../../core/services/pedido.service';
 import { FileUploadComponent } from '../../shared/components/file-upload/file-upload.component';
+import { Archivo } from '../../core/models/pedido.model';
 
 @Component({
   selector: 'app-pedido-archivos',
@@ -11,20 +12,27 @@ import { FileUploadComponent } from '../../shared/components/file-upload/file-up
   styleUrls: ['./pedido-archivos.component.scss'],
 })
 export class PedidoArchivosComponent {
-  @Input() archivos: Archivo[] = [];
-  @Output() archivoAgregado = new EventEmitter<Archivo>();
-  @Output() archivoEliminado = new EventEmitter<string>();
+  archivos: Archivo[] = [];
   @Output() siguienteClicked = new EventEmitter<void>();
 
-  onArchivoAgregado(archivo: Archivo): void {
-    this.archivoAgregado.emit(archivo);
+  constructor(public pedidoService: PedidoService) {}
+
+  onArchivoAgregado(a: Archivo) {
+    this.archivos.push(a);
   }
 
-  onArchivoEliminado(archivoId: string): void {
-    this.archivoEliminado.emit(archivoId);
+  onArchivoEliminado(a: { id: string; nombre: string }) {
+    this.archivos = this.archivos.filter(x => x.id !== a.id);
+    this.pedidoService.setFiles?.(
+      (this.pedidoService.getFiles?.() ?? []).filter(f => f.name !== a.nombre)
+    );
   }
 
-  siguiente(): void {
+  onFilesSelected(files: File[]) {
+    this.pedidoService.setFiles?.(files);
+  }
+
+  siguiente() {
     this.siguienteClicked.emit();
   }
 }

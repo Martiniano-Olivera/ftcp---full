@@ -3,7 +3,7 @@
     [archivos]="archivosUI"
     (archivoAgregado)="archivosUI.push($event)"
     (archivoEliminado)="onEliminar($event)"
-    (filesSelected)="prueba($event)"
+    (filesSelected)="onFilesSelected($event)"
   >
   </app-file-upload>
 
@@ -16,11 +16,12 @@
       Teléfono:
       <input type="tel" name="telefono" [(ngModel)]="model.telefono" required />
     </label>
-    <button type="submit" [disabled]="!files?.length || loading">
+    <button type="submit" [disabled]="!files.length || loading">
       {{ loading ? "Enviando..." : "Enviar" }}
     </button>
   </form>
 </div>
+
 <ng-template #enviadoTpl>
   <p>¡Pedido enviado! ID: {{ orderId }}</p>
 </ng-template>

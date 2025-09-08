@@ -43,14 +43,6 @@ export class PedidoWizardComponent implements OnInit {
     }
   }
 
-  onArchivoAgregado(archivo: any): void {
-    this.pedidoService.agregarArchivo(archivo);
-  }
-
-  onArchivoEliminado(archivoId: string): void {
-    this.pedidoService.eliminarArchivo(archivoId);
-  }
-
   onOpcionesActualizadas(opciones: any): void {
     this.pedidoService.actualizarOpciones(opciones);
   }
